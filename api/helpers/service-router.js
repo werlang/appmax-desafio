@@ -6,16 +6,21 @@ export default class ServiceRouter {
     static services = {};
 
     constructor(serviceName, data) {
-        this.id = ServiceRouter.queue.add({
-            data,
-            callback: async (data) => {
-                if (!ServiceRouter.services[serviceName]) {
-                    throw new Error('Service not found.');
-                }
+        const callback = async (data) => {
+            if (!ServiceRouter.services[serviceName]) {
+                throw new Error('Service not found.');
+            }
+            try {
                 const service = await ServiceRouter.services[serviceName](data);
                 return service;
             }
-        });
+            catch (error) {
+                console.error('Service error: ', error);
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                return callback(data);
+            }
+        }
+        this.id = ServiceRouter.queue.add({ data, callback });
     }
 
     static register(name, callback) {
