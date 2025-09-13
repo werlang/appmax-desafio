@@ -9,7 +9,7 @@ services:
         volumes:
             - ./api:/app
             - node_modules_api:/app/node_modules
-        # command: npm run ${NODE_ENV:-development}
-        command: tail -f /dev/null #idle container
+        command: npm run ${NODE_ENV:-development}
+        # command: tail -f /dev/null #idle container
 volumes:
     node_modules_api:

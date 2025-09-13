@@ -13,5 +13,9 @@
   "author": "Pablo Werlang",
   "license": "MIT",
   "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "nodemailer": "^7.0.6",
+    "nodemon": "^3.1.10"
   }
 }
