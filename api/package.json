@@ -1,0 +1,17 @@
+{
+  "name": "appmax-desafio",
+  "version": "0.1.0",
+  "description": "Contralizador de notificações",
+  "type": "module",
+  "scripts": {
+    "production": "node app.js",
+    "development": "nodemon --inspect=0.0.0.0 app.js"
+  },
+  "nodemonConfig": {
+    "ignore": []
+  },
+  "author": "Pablo Werlang",
+  "license": "MIT",
+  "dependencies": {
+  }
+}
