@@ -10,9 +10,9 @@ export default () => {
             pass: process.env.EMAIL_PASS,
         });
         const resp = await emailService.send({
-            receiver: data.to,
-            subject: data.subject,
-            text: data.message,
+            receiver: data?.to,
+            subject: data?.subject,
+            text: data?.message,
         });
         console.log('Email sent: ', resp);
         return resp;
@@ -21,8 +21,8 @@ export default () => {
     ServiceRouter.register('telegram', async (data) => {
         const telegramService = new TelegramService(process.env.TELEGRAM_BOT_TOKEN);
         const resp = await telegramService.send({
-            chatId: data.chatId,
-            text: data.message,
+            chatId: data?.chatId,
+            text: data?.message,
         });
         console.log('Telegram message sent: ', resp);
         return resp;
@@ -31,9 +31,9 @@ export default () => {
     ServiceRouter.register('sms', async (data) => {
         const smsService = new SMSService(process.env.SMS_API_KEY);
         const resp = await smsService.send({
-            to: data.to,
-            message: data.message,
-            senderId: data.senderId,
+            to: data?.to,
+            message: data?.message,
+            senderId: data?.senderId,
         });
         console.log('SMS sent: ', resp);
         return resp;
