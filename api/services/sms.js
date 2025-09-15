@@ -23,8 +23,8 @@ export default class SMSService {
         callbackUrl = null,
     }) {
         if (process.env.NODE_ENV !== 'production') {
-            console.log('DEV LOG: SMS alert:', { to, message, senderId });
-            return true;
+            const logMessage = `DEV LOG: SMS to ${to} - ${message}`;
+            return { message: logMessage };
         }
 
         const url = 'https://api.sms.to/sms/send';
@@ -37,7 +37,7 @@ export default class SMSService {
         if (callbackUrl) body.callback_url = callbackUrl;
 
         try {
-            return await fetch(url, {
+            await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${this.apiKey}`,
@@ -45,10 +45,11 @@ export default class SMSService {
                 },
                 body: JSON.stringify(body),
             }).then(res => res.json());
+            return { success: true }
         }
         catch (error){
             console.log('error sending sms', error);
-            return false;
+            return { success: false, error };
         }
 
     }

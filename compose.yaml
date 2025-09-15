@@ -11,5 +11,8 @@ services:
             - node_modules_api:/app/node_modules
         command: npm run ${NODE_ENV:-development}
         # command: tail -f /dev/null #idle container
+    redis:
+        image: redis:alpine
+        restart: unless-stopped
 volumes:
     node_modules_api:

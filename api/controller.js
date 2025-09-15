@@ -15,6 +15,7 @@ export default () => {
             text: data.message,
         });
         console.log('Email sent: ', resp);
+        return resp;
     });
     
     ServiceRouter.register('telegram', async (data) => {
@@ -24,6 +25,7 @@ export default () => {
             text: data.message,
         });
         console.log('Telegram message sent: ', resp);
+        return resp;
     });
     
     ServiceRouter.register('sms', async (data) => {
@@ -34,5 +36,6 @@ export default () => {
             senderId: data.senderId,
         });
         console.log('SMS sent: ', resp);
+        return resp;
     });
 }

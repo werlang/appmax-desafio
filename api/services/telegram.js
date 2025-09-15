@@ -8,8 +8,9 @@ export default class TelegramService {
 
     async send(message) {
         if (process.env.NODE_ENV !== 'production') {
-            console.log('DEV LOG: Telegram alert:', message);
-            return true;
+            const logMessage = `DEV LOG: Telegram message to chat ${message.chatId} - ${message.text}`;
+            console.log(logMessage);
+            return { message: logMessage };
         }
 
         const args = {
@@ -20,11 +21,12 @@ export default class TelegramService {
 
         const url = `${this.url}?${ new URLSearchParams(args).toString() }`;
         try {
-            return await fetch(url).then(res => res.json());
+            await fetch(url).then(res => res.json());
+            return { success: true };
         }
         catch (error){
             console.log('error sending telegram message', error);
-            return false;
+            return { success: false, error };
         }
 
     }
