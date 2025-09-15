@@ -33,6 +33,15 @@ app.post('/sms', (req, res) => {
     res.send({ status: 'in queue', position: service.getPosition(), id: service.getId() });
 });
 
+app.get('/service/:id', async (req, res) => {
+    const service = await ServiceRouter.getService(req.params.id);
+    if (!service) {
+        return res.status(404).send({ message: 'Service not found.' });
+    }
+    
+    res.send(service);
+});
+
 // 404
 app.use((req, res) => {
     res.status(404).send({ message: 'I am sorry, but I think you are lost.' });
