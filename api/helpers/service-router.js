@@ -8,7 +8,9 @@ export default class ServiceRouter {
     static redis = new RedisDriver({ host: 'redis' }).namespace('service');
 
     constructor(serviceName, data) {
-        const callback = async (data) => {
+        const maxRetries = parseInt(process.env.MAX_RETRIES || '5');
+        
+        const callback = async (data, retryCount = 0) => {
             if (!ServiceRouter.services[serviceName]) {
                 throw new Error('Service not found.');
             }
@@ -20,8 +22,13 @@ export default class ServiceRouter {
             }
             catch (error) {
                 console.error('Service error: ', error);
+                
+                if (retryCount >= maxRetries) {
+                    throw new Error(`Service failed after ${maxRetries} retries: ${error.message}`);
+                }
+                
                 await new Promise(resolve => setTimeout(resolve, 1000));
-                return callback(data);
+                return callback(data, retryCount + 1);
             }
         }
         this.id = ServiceRouter.queue.add({ data, callback });
@@ -45,6 +52,7 @@ export default class ServiceRouter {
     }
 
     getPosition() {
-        return ServiceRouter.queue.getPosition(this.id) + 1;
+        const pos = ServiceRouter.queue.getPosition(this.id);
+        return pos !== null ? pos + 1 : null;
     }
 }
